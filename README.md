@@ -1,36 +1,58 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-## Getting Started
+## Project Description
 
-First, run the development server:
+The goal is to extract structured data points such as property name, address, tenant details, lease terms, financial metrics, and more. This solution simplifies the data extraction process by converting unstructured textual data from PDFs into a structured JSON format.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+---
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Setup Steps
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. **Clone the repository**:
+   ```bash
+   git clone https://github.com/devdignesh/starboard
+   cd starboard
+   ```
+2. **Setup `.env` file**
+   ```bash
+    OPENAI_API_KEY=""
+    ```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Approach
 
-## Learn More
+### Input -> Output Process
 
-To learn more about Next.js, take a look at the following resources:
+#### 1. Read PDF
+I've created Fileupload component that accepts PDF file. After successfully uploaded file and extract raw text from the uploaded PDF using `pdf-parse`. 
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+#### 2. Prepare AI Prompt
+   - Created clear and structured prompt that tells the OpenAI model to extract: including but not limited to:
+     - Property Name
+     - Address
+     - Tenant Name
+     - Rent Per Square Foot (PSF)
+     - Lease Term
+     - Property Size
+     - Assumable Financing
+     - Seller Details, Financial Metrics, Lease Analysis, etc.
+   - The output is structured as a JSON object that organizes this data into fields like:
+     - `property_name`
+     - `address`
+     - `tenant`
+     - `rent_psf`
+     - `lease_term`
+     - `guidance_price`, etc.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+ #### 3. Call OpenAI API
+- Use gpt-4.
+- Send extracted text + prompt to OpenAI.
+- Receive structured JSON data.
 
-## Deploy on Vercel
+#### 4. Clean & Validate
+- Parse OpenAI output.
+- Handle missing fields, fallback logic, or default values.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+#### 5. Connect to Frontend
+- Pass JSON data to frontend via API route.
+- Feed structured data into existing card layout and chart.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
