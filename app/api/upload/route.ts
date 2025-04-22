@@ -10,14 +10,13 @@ const API_KEY = process.env.OPENAI_API_KEY;
 
 export async function POST(req: NextRequest) {
   try {
-
     const formData = await req.formData();
     const file = formData.get("file") as File;
 
     if (!file) {
       return NextResponse.json({ error: "No file provided." }, { status: 400 });
     }
-    
+
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
 
@@ -26,7 +25,7 @@ export async function POST(req: NextRequest) {
     await mkdir(uploadsDir, { recursive: true }); // Ensure folder exists
 
     const filePath = path.join(uploadsDir, file.name);
-    console.log('Uploading to:', filePath);
+    console.log("Uploading to:", filePath);
 
     await writeFile(filePath, buffer);
 
@@ -43,7 +42,6 @@ export async function POST(req: NextRequest) {
       url: `/uploads/${file.name}`,
       extractedText: aiResponse, // Return the extracted text (for testing purposes)
     });
-    
   } catch (error) {
     console.error("Error during file upload process:", error);
     const result = error as Error;
@@ -68,6 +66,7 @@ function readFile(filePath: string): Promise<Buffer> {
       .catch((err: NodeJS.ErrnoException) => reject(err));
   });
 }
+
 // Function to send the extracted text to AI service (OpenAI)
 async function sendToAI(text: string) {
   const prompt = promptTemplate(text);
