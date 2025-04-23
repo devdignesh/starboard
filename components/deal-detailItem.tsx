@@ -1,15 +1,16 @@
 
 import React from "react"; 
-import { DealDetail } from "@/utils/types";
-import { iconMap } from "@/utils/data";
+import { DealDetail } from "@/utils/types"; 
+import { iconsMap } from "@/utils/data";
 
 interface DealDetailItemProps {
   item: DealDetail;
   index: number;
 }
 
-const  DealDetailItem: React.FC<DealDetailItemProps> = ({ item, index }) => {
-  const Icon = iconMap[item.iconName];
+const DealDetailItem: React.FC<DealDetailItemProps> = ({ item, index }) => {
+  const Icon = iconsMap[item.iconName];
+  
   return (
     <div key={index} className="flex items-center gap-x-2 min-w-40 text-neutral-600">
       <Icon size={22} />

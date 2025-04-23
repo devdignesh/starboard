@@ -16,6 +16,14 @@ The goal is to extract structured data points such as property name, address, te
    ```bash
     OPENAI_API_KEY=""
     ```
+3. **Install dependencies**:
+   ```bash
+   npm install
+   ```
+4. **Run development server**
+   ```bash
+   npm run dev
+   ```
 
 ## Approach
 

@@ -8,8 +8,8 @@ import {
   } from "@/utils/data";
   
 import Accordion from "@/components/accordion";
-import Section from "./section";
-import DealDetailItem from "./deal-detailItem";
+import Section from "./section"; 
+import StaticDealDetailItem from "./static-deal-detail-item";
 
 const PropertyMatrix = () => {
   return (
@@ -18,35 +18,35 @@ const PropertyMatrix = () => {
         <Accordion title="Asset-Level Data">
           <div className="mt-5 flex flex-wrap gap-x-14 md:gap-y-6 gap-y-4 text-zinc-700 xl:max-w-4xl">
             {assetLevelData.map((item, index) => (
-              <DealDetailItem key={index} item={item} index={index} />
+              <StaticDealDetailItem key={index} item={item} index={index} />
             ))}
           </div>
         </Accordion>
         <Accordion title="Projected Financial Metrics">
           <div className="mt-5 flex flex-wrap gap-x-14 md:gap-y-6 gap-y-4 text-zinc-700 xl:max-w-4xl">
             {projectedFinancialMetricsData.map((item, index) => (
-              <DealDetailItem key={index} item={item} index={index} />
+              <StaticDealDetailItem key={index} item={item} index={index} />
             ))}
           </div>
         </Accordion>
         <Accordion title="Key Assumptions">
           <div className="mt-5 flex flex-wrap gap-x-14 md:gap-y-6 gap-y-4 text-zinc-700 xl:max-w-4xl">
             {keyAssumptionsData.map((item, index) => (
-              <DealDetailItem key={index} item={item} index={index} />
+              <StaticDealDetailItem key={index} item={item} index={index} />
             ))}
           </div>
         </Accordion>
         <Accordion title="Market Analysis">
           <div className="mt-5 flex flex-wrap gap-x-14 md:gap-y-6 gap-y-4 text-zinc-700 xl:max-w-4xl">
             {marketAnalysisData.map((item, index) => (
-              <DealDetailItem key={index} item={item} index={index} />
+              <StaticDealDetailItem key={index} item={item} index={index} />
             ))}
           </div>
         </Accordion>
         <Accordion title="Lease Analysis">
           <div className="mt-5 flex flex-wrap gap-x-14 md:gap-y-6 gap-y-4 text-zinc-700 xl:max-w-4xl">
             {leaseAnalysisData.map((item, index) => (
-              <DealDetailItem key={index} item={item} index={index} />
+              <StaticDealDetailItem key={index} item={item} index={index} />
             ))}
           </div>
         </Accordion>

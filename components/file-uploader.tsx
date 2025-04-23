@@ -2,6 +2,7 @@
 
 import {
   AlertCircleIcon,
+  Loader2,
   PaperclipIcon,
   UploadIcon,
   XIcon,
@@ -9,13 +10,18 @@ import {
 
 import { formatBytes, useFileUpload } from "@/hooks/use-file-upload";
 import { Button } from "@/components/ui/button";
+import { useProperty } from "@/context/PropertyContext";
+import { useState } from "react";
+import { jsonrepair } from "jsonrepair";
 
 type FileUploaderProps = {
   setIsFileUploaded: React.Dispatch<React.SetStateAction<boolean>>; // Type for the setter function
 };
 
 export default function FileUploader({ setIsFileUploaded }: FileUploaderProps) {
-  const maxSize = 10 * 1024 * 1024; // 10MB
+  const maxSize = 15 * 1024 * 1024; // 15MB
+  const [isLoading, setIsLoading] = useState(false);
+  const { setData } = useProperty();
 
   const [
     { files, isDragging, errors },
@@ -29,7 +35,7 @@ export default function FileUploader({ setIsFileUploaded }: FileUploaderProps) {
       getInputProps,
     },
   ] = useFileUpload({
-    maxSize, 
+    maxSize,
   });
 
   const file = files[0];
@@ -42,8 +48,9 @@ export default function FileUploader({ setIsFileUploaded }: FileUploaderProps) {
       return;
     }
 
+    setIsLoading(true);
     const formData = new FormData();
-    formData.append("file", selectedFile); 
+    formData.append("file", selectedFile);
 
     try {
       const res = await fetch("/api/upload", {
@@ -51,17 +58,28 @@ export default function FileUploader({ setIsFileUploaded }: FileUploaderProps) {
         body: formData,
       });
 
-      console.log("res", res)
+      const data = await res.json();
       if (res.ok) {
-        alert("File uploaded successfully!");
+        console.log("RAW AI RESPONSE:==========>", data.extractedText);
+        const cleanedJson = data.extractedText
+          .replace(/```json|```/g, "")
+          .replace(/[“”]/g, '"')
+          .trim();
+
+        const validJson = jsonrepair(cleanedJson);
+        const parsedJson = JSON.parse(validJson);
+        setData(parsedJson);
+        setIsFileUploaded(true);
       } else {
         const error = await res.text();
         alert("Upload failed: " + error);
       }
-      setIsFileUploaded(true);
+      // setIsFileUploaded(true);
     } catch (err) {
       console.error(err);
       alert("Something went wrong during upload.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -141,12 +159,24 @@ export default function FileUploader({ setIsFileUploaded }: FileUploaderProps) {
           </div>
           <Button
             size="default"
-            className="cursor-pointer w-full"
+            className="cursor-pointer w-full "
             onClick={handleSubmit}
             aria-label="Remove file"
           >
-            Submit
+            {isLoading ? (
+              <span className="flex items-center gap-2">
+                <Loader2 className="animate-spin w-4 h-4 text-white" />
+                Loading...
+              </span>
+            ) : (
+              "Submit"
+            )}
           </Button>
+          {isLoading && (
+            <span className="text-sm text-muted-foreground mt-2 block text-center">
+              AI model is processing your file...
+            </span>
+          )}
         </div>
       )}
     </div>

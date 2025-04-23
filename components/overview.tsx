@@ -4,8 +4,10 @@ import Link from "next/link";
 import { ArrowUpRight, CalendarArrowUp, Heart, Warehouse } from "lucide-react";
 import { Gridview } from "./GridView";
 import ExportOptions from "./export-options";
+import { useProperty } from "@/context/PropertyContext";
 
 const Overview = () => {
+  const { data } = useProperty();
   return (
     <>
       <section className="py-1 flex justify-between">
@@ -31,17 +33,17 @@ const Overview = () => {
         <div className="xl:min-w-4xl min-h-[420px]">
           <Gridview />
         </div>
-        <div className="min-lg:ml-4 flex flex-col  p-2 rounded-2xl gap-y-2">
+        <div className="min-lg:ml-4 flex flex-col  p-2 rounded-2xl gap-y-2 w-full">
           <span className="font-semibold md:text-2xl text-xl">
-            280 Richards, Brooklyn, NY
+            {data?.property_name || 'Propertry name'}
           </span>
           <span className="flex gap-x-2 items-center text-zinc-600">
             <CalendarArrowUp size={18} />
-            11/06/2024
+            {data?.upload_date || '01/01/2001'}
           </span>
           <span className="flex gap-x-2 items-center text-zinc-600">
             <Warehouse size={18} />
-            Warehouse
+            {data?.property_type.toLowerCase() || 'Warehouse'}
           </span>
           <ExportOptions />
         </div>

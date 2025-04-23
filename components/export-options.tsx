@@ -12,7 +12,7 @@ const ExportOptions: React.FC = () => {
   };
 
   return (
-    <div className="gap-y-2 gap-x-2 flex min-lg:flex-col ">
+    <div className="gap-y-2 gap-x-2 flex min-lg:flex-col">
       <button
         onClick={handleDownloadPDF}
         className="bg-zinc-300 flex items-center justify-center gap-x-2 cursor-pointer w-full py-3 rounded-lg hover:bg-zinc-400/70 duration-100"

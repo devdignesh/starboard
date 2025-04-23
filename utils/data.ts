@@ -17,8 +17,9 @@ import {
   Car,
   Calendar,
   DoorOpen,
+  LucideIcon,
 } from "lucide-react";
-import {  DealDetail, Insight, SaleComparable } from "./types";
+import {  DealDetail, Insight, SaleComparable, StaticDealDetail } from "./types"; 
 
 export const iconMap = {
   UserRound,
@@ -40,6 +41,7 @@ export const iconMap = {
   Users, 
   Briefcase,
 };
+export type IconName = keyof typeof iconMap;
 
 export const NavItems = [
   { label: "Deal Overview", href: "/" },
@@ -47,6 +49,19 @@ export const NavItems = [
   { label: "Pipeline", href: "/" },
   { label: "Settings", href: "/" },
 ];
+
+export const iconsMap: Record<string, LucideIcon> = {
+  seller: UserRound,
+  guidance_price: CircleDollarSign,
+  guidance_price_psf: CircleDollarSign,
+  cap_rate: Percent,
+  property_size: Ruler,
+  rent_psf: Ruler,
+  land_area: Map,
+  zoning: Building,
+  clear_heights:ArrowUpCircle,
+};
+
 
 export const dealData: DealDetail[] = [
   {
@@ -166,9 +181,7 @@ export const supplypipelineData: SaleComparable[] = [
 ];
  
  
-
- 
-export const assetLevelData: DealDetail[] = [
+export const assetLevelData: StaticDealDetail[] = [
   {
     iconName: "ArrowUpCircle",
     title: "Clear Heights",
@@ -211,7 +224,7 @@ export const assetLevelData: DealDetail[] = [
   },
 ];
 
-export const projectedFinancialMetricsData: DealDetail[] = [
+export const projectedFinancialMetricsData: StaticDealDetail[] = [
   {
     iconName: "Percent",
     title: "IRR",
@@ -234,7 +247,7 @@ export const projectedFinancialMetricsData: DealDetail[] = [
   },
 ] 
 
-export const keyAssumptionsData: DealDetail[] = [
+export const keyAssumptionsData: StaticDealDetail[] = [
   {
     iconName: "DollarSign",
     title: "Exit Price",
@@ -257,7 +270,7 @@ export const keyAssumptionsData: DealDetail[] = [
   },
 ];
 
-export const marketAnalysisData: DealDetail[] = [
+export const marketAnalysisData: StaticDealDetail[] = [
   {
     iconName: "MapPin",
     title: "Nearest Urban Center",
@@ -279,7 +292,7 @@ export const marketAnalysisData: DealDetail[] = [
     value: "7.4%",
   },
 ];
-export const leaseAnalysisData: DealDetail[] = [
+export const leaseAnalysisData: StaticDealDetail[] = [
   {
     iconName: "DollarSign",
     title: "Rent PSF",

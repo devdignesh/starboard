@@ -1,12 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { writeFile, mkdir } from "fs/promises";
 import path from "path";
-import pdfParse from "pdf-parse";
+import { sendChunksToAI } from "@/utils/sendChunksToAI";
+import PdfParse from "pdf-parse";
 import { promises as fs } from "fs";
-import { log } from "console";
-import { promptTemplate } from "@/utils/prompt";
-
-const API_KEY = process.env.OPENAI_API_KEY;
+import { jsonrepair } from "jsonrepair";
 
 export async function POST(req: NextRequest) {
   try {
@@ -19,28 +17,43 @@ export async function POST(req: NextRequest) {
 
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
-
     const uploadsDir = path.join(process.cwd(), "public", "uploads");
-
     await mkdir(uploadsDir, { recursive: true }); // Ensure folder exists
-
-    const filePath = path.join(uploadsDir, file.name);
-    console.log("Uploading to:", filePath);
+    const uniqueName = `OM-${Date.now()}-${Math.random()
+      .toString(36)
+      .substring(2, 10)}.pdf`;
+    const filePath = path.join(uploadsDir, uniqueName);
 
     await writeFile(filePath, buffer);
 
     // Extract text from PDF
-    const text = await extractTextFromPDF(filePath);
-    console.log("extractTextFromPDF", text);
+    const extractedText = await extractTextFromPDF(filePath);
+    const allResponses = await sendChunksToAI(extractedText);
+    const aiResponse = allResponses.join("\n\n");
 
-    const aiResponse = await sendToAI(text);
-    console.log("sendToAI", aiResponse);
+    console.log("aiResponse============>", aiResponse);
+    // Extract the first JSON object only
 
-    log("response", aiResponse);
+    let firstJsonMatch = aiResponse.match(/```json([\s\S]*?)```/);
+
+    if (!firstJsonMatch) {
+      firstJsonMatch = aiResponse.match(/\{[\s\S]*\}/); // greedy fallback
+    }
+
+    let singleJson = firstJsonMatch
+      ? firstJsonMatch[1] || firstJsonMatch[0]
+      : "{}";
+
+    try {
+      singleJson = jsonrepair(singleJson);
+    } catch (e) {
+      console.error("JSON repair failed:", e);
+    }
+
     return NextResponse.json({
       success: true,
       url: `/uploads/${file.name}`,
-      extractedText: aiResponse, // Return the extracted text (for testing purposes)
+      extractedText: singleJson, // Return the extracted text (for testing purposes)
     });
   } catch (error) {
     console.error("Error during file upload process:", error);
@@ -54,7 +67,7 @@ export async function POST(req: NextRequest) {
 
 async function extractTextFromPDF(filePath: string): Promise<string> {
   const pdfBuffer = await readFile(filePath); // Use Node.js fs to read the file
-  const pdfData = await pdfParse(pdfBuffer); // Extract text from PDF
+  const pdfData = await PdfParse(pdfBuffer); // Extract text from PDF
   return pdfData.text; // Return the extracted text
 }
 
@@ -65,34 +78,4 @@ function readFile(filePath: string): Promise<Buffer> {
       .then((data) => resolve(data))
       .catch((err: NodeJS.ErrnoException) => reject(err));
   });
-}
-
-// Function to send the extracted text to AI service (OpenAI)
-async function sendToAI(text: string) {
-  const prompt = promptTemplate(text);
-
-  const response = await fetch("https://api.openai.com/v1/completions", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${API_KEY}`,
-    },
-    body: JSON.stringify({
-      model: "gpt-4",
-      messages: [
-        {
-          role: "system",
-          content: "You are a real estate data extraction assistant.",
-        },
-        {
-          role: "user",
-          content: prompt,
-        },
-      ],
-      max_tokens: 150,
-    }),
-  });
-
-  const data = await response.json();
-  return data.choices[0].text; // Return the AI response
 }

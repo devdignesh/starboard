@@ -27,13 +27,13 @@ const SaleComparables: React.FC = () => {
         {saleComparablesData.length > 3 && (
           <>
             <button
-              className="absolute left-0 top-1/2 -translate-y-1/2 bg-white p-2 rounded-full shadow-md z-10"
+              className="absolute left-0 top-1/2 cursor-pointer -translate-y-1/2 bg-white p-2 rounded-full shadow-md z-10"
               onClick={() => scroll("left")}
             >
               <ChevronLeft className="w-6 h-6" />
             </button>
             <button
-              className="absolute right-0 top-1/2 -translate-y-1/2 bg-white p-2 rounded-full shadow-md z-10"
+              className="absolute right-0 top-1/2 cursor-pointer -translate-y-1/2 bg-white p-2 rounded-full shadow-md z-10"
               onClick={() => scroll("right")}
             >
               <ChevronRight className="w-6 h-6" />
@@ -59,7 +59,7 @@ const SaleComparables: React.FC = () => {
               </div>
               <div className="p-4 flex flex-col gap-y-1 text-zinc-700">
                 <strong className="text-xl">{item.pp}</strong>
-                <h3 className="text-lg truncate">{item.address}</h3>
+                <h3 className="text-base truncate">{item.address}</h3>
                 <div className="flex justify-between">
                   <span className="text-sm">
                     <strong>{item.sf}</strong> sqft
