@@ -60,7 +60,7 @@ I've created Fileupload component that accepts PDF file. After successfully uplo
 - Handle missing fields, fallback logic, or default values.
 
 #### 5. Connect to Frontend
-- Pass JSON data to frontend via API route.
-- Feed structured data into existing card layout and chart.
+- Pass JSON data to frontend via context API.
+- Feed structured data into existing card layout.
 
 

@@ -5,7 +5,7 @@ import FileUploader from "@/components/file-uploader";
 import { useState } from "react";
 
 export default function Home() {
-  const [isFileUploaded, setIsFileUploaded] = useState(true);
+  const [isFileUploaded, setIsFileUploaded] = useState(false);
 
   return (
     <>
