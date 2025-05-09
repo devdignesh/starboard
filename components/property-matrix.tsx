@@ -15,7 +15,7 @@ const PropertyMatrix = () => {
   return (
     <>
       <Section>
-        <Accordion title="Asset-Level Data">
+        <Accordion title="Asset-Level Data" status={true}>
           <div className="mt-5 flex flex-wrap gap-x-14 md:gap-y-6 gap-y-4 text-zinc-700 xl:max-w-4xl">
             {assetLevelData.map((item, index) => (
               <StaticDealDetailItem key={index} item={item} index={index} />

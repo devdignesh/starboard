@@ -41,7 +41,7 @@ I've created Fileupload component that accepts PDF file. After successfully uplo
      - Lease Term
      - Property Size
      - Assumable Financing
-     - Seller Details, Financial Metrics, Lease Analysis, etc.
+     - Seller Details, etc.
    - The output is structured as a JSON object that organizes this data into fields like:
      - `property_name`
      - `address`

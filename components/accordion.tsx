@@ -5,10 +5,11 @@ import { ChevronDown } from "lucide-react";
 interface AccordionProps {
   title: string;
   children: React.ReactNode;
+  status?: boolean;
 }
 
-const Accordion: React.FC<AccordionProps> = ({ title, children }) => {
-  const [isOpen, setIsOpen] = useState(false);
+const Accordion: React.FC<AccordionProps> = ({ title, children, status=false }) => {
+  const [isOpen, setIsOpen] = useState(status);
 
   return (
     <div className="flex flex-col xl:max-w-4xl sm:py-6 py-4  border-b  border-zinc-400">
