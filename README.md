@@ -5,6 +5,8 @@ The goal is to extract structured data points such as property name, address, te
 
 ---
 
+#### [Demo URL](https://www.loom.com/share/1e7ab872a91047bb8ce143bcbaf1df46?sid=5a9ad6b0-41f7-4a4c-8df0-a424e46cfc53) 🔗
+
 ## Setup Steps
 
 1. **Clone the repository**:
